@@ -16,18 +16,25 @@ class Neurona():
         self.lista_w = self.generar_w()
         self.lista_e=[]
         self.lista_iter = []
-        aux = 1
-        self.err_viejo=1
+        self.aux = 1
+        self.err_viejo=0
         self.err_nuevo=0
-        while self.err_nuevo > self.error_permisible and self.err_viejo > self.err_nuevo:
-            self.lista_u = self.calcular_u()
-            self.y_calculada=self.funcion_activacion()
-            self.error = self.calcular_error()
-            self.lista_w=self.nueva_w()
-            self.lista_iter.append(aux+1)
-            aux += 1
+        self.iniciar_alg()
+        
+        while self.err_nuevo > self.error_permisible and self.err_viejo <= self.err_nuevo:
+            print(f'error nuevo: {self.err_nuevo}')
+            print(f'error viejo: {self.err_viejo}')
+            self.iniciar_alg()
         graficar_error(self.lista_e,self.lista_iter)
 
+    def iniciar_alg(self):
+        self.lista_u = self.calcular_u()
+        self.y_calculada=self.funcion_activacion()
+        self.error = self.calcular_error()
+        self.lista_w=self.nueva_w()
+        self.lista_iter.append(self.aux+1)
+        self.aux += 1
+        
     def generar_w(self):
         lista_w = []
         while len(lista_w) < self.cantidad_x:
@@ -45,15 +52,15 @@ class Neurona():
 
     def calcular_error(self):
         e = numpy.subtract(self.y_deseada, self.y_calculada)
-        self.err_viejo=self.err_nuevo
-        self.err_nuevo=numpy.linalg.norm(e)
+        self.err_viejo=self.err_nuevo #0
+        self.err_nuevo=numpy.linalg.norm(e) / len(self.lista_x) #error random
         self.lista_e.append(self.err_nuevo)
         return e
 
     def nueva_w(self):
-        multi = numpy.matmul(numpy.transpose(self.error), self.lista_x)
-        aprendizaje = numpy.dot(self.eta,multi) 
-        nueva_w = self.lista_w+aprendizaje
+        e_x = numpy.matmul(numpy.transpose(self.error), self.lista_x)
+        n_ex = numpy.dot(self.eta,e_x) 
+        nueva_w = self.lista_w-n_ex
         print(f'Lista u: {self.lista_u}')
         return nueva_w
 
