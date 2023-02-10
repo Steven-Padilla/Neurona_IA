@@ -4,6 +4,6 @@ def graficar_error(error,valor_x):
     ax.set_xlabel('Iteración')
     ax.set_ylabel('Magnitud del error')
     ax.plot(valor_x, error,label='Error')
-    ax.legend('upper right')
+    ax.legend(loc='upper right')
     plt.show()
 
