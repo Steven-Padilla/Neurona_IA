@@ -3,7 +3,7 @@ import numpy
 import csv
 import pandas as pd
 from interfaz import Interfaz
-from grafica import graficar_error, graficar_evolucion_pesos, graficar_versus
+from grafica import graficar_error, graficar_evolucion_pesos, graficar_versus, graficar_error_versus
 class Neurona():
     def __init__(self, eta, cantidad_x,error_permisible):
         self.eta = eta
@@ -14,6 +14,7 @@ class Neurona():
         self.lista_pesos = []
         self.lista_e=[]
         self.lista_iter = []
+        self.lista_error_observado = []
         self.aux = 1
         self.err_viejo=0
         self.err_nuevo=0
@@ -30,7 +31,8 @@ class Neurona():
 
         graficar_error(self.lista_e,self.lista_iter)
         graficar_evolucion_pesos(self.lista_pesos,self.lista_iter)
-        graficar_versus(self.y_deseada, self.y_calculada,self.lista_iter)
+        graficar_versus(self.y_deseada, self.y_calculada)
+        graficar_error_versus(self.lista_error_observado,self.y_deseada)
 
     def iniciar_alg(self):
         self.lista_u = self.calcular_u()
@@ -59,6 +61,7 @@ class Neurona():
         e = numpy.subtract(self.y_deseada,self.y_calculada)
         self.err_viejo=self.err_nuevo #0
         print(f'error viejo: {self.err_viejo}')
+        self.lista_error_observado.append(e)
         self.err_nuevo=numpy.linalg.norm(e)  #error random
         print(f'error nuevo: {self.err_nuevo}')
         self.lista_e.append(self.err_nuevo)
@@ -78,7 +81,10 @@ class Neurona():
         sesgo=pd.DataFrame(data=sesgo)
         lista_x=pd.concat([sesgo,data[['X1','X2','X3']]],axis=1).values.tolist()
         lista_y=data[['Y']].values.tolist()
-        return (numpy.array(lista_x), numpy.array(lista_y))
+        arr_aux=[]
+        for y in lista_y:
+            arr_aux.append(y[0])
+        return (numpy.array(lista_x), numpy.array(arr_aux))
     def calcular_sesgo(self,data):
         sesgo=[1 for _ in range(len(data.axes[0]))]
         print(len(sesgo))
