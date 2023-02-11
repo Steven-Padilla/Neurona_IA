@@ -65,17 +65,23 @@ class Neurona():
         e_x = numpy.matmul(numpy.transpose(self.error), self.lista_x)
         n_ex = numpy.dot(self.eta,e_x) 
         nueva_w = self.lista_w+n_ex
-        print(f'Lista u: {self.lista_u}')
+        # print(f'Lista u: {self.lista_u}')
         return nueva_w
 
     def leer_csv(self):
         data = pd.read_csv('203404_prueba.csv')
-        lista_x=data[['X1','X2','X3']].values.tolist()
+
+        sesgo=self.calcular_sesgo(data)
+        sesgo=pd.DataFrame(data=sesgo)
+        lista_x=pd.concat([sesgo,data[['X1','X2','X3']]],axis=1).values.tolist()
         lista_y=data[['Y']].values.tolist()
         return (lista_x,lista_y)
-        
+    def calcular_sesgo(self,data):
+        sesgo=[1 for _ in range(len(data.axes[0]))]
+        print(len(sesgo))
+        return sesgo
 
 if __name__ == '__main__':
     data=Interfaz().get_datos()
 
-    algotirmo = Neurona(eta=data['aprendizaje'], cantidad_x=3,error_permisible=data['margen_error'])
+    algotirmo = Neurona(eta=data['aprendizaje'], cantidad_x=4,error_permisible=data['margen_error'])
