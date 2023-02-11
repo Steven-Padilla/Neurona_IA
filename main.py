@@ -3,7 +3,7 @@ import numpy
 import csv
 import pandas as pd
 from interfaz import Interfaz
-from grafica import graficar_error, graficar_evolucion_pesos, graficar_versus, graficar_error_versus
+from grafica import graficar_error, graficar_evolucion_pesos, graficar_versus, graficar_error_versus, reporte
 class Neurona():
     def __init__(self, eta, cantidad_x,error_permisible):
         self.eta = eta
@@ -33,6 +33,8 @@ class Neurona():
         graficar_evolucion_pesos(self.lista_pesos,self.lista_iter)
         graficar_versus(self.y_deseada, self.y_calculada)
         graficar_error_versus(self.lista_error_observado,self.y_deseada)
+        reporte(self.lista_w,self.lista_pesos,self.error_permisible,self.lista_error_observado, self.lista_iter)
+
 
     def iniciar_alg(self):
         self.lista_u = self.calcular_u()

@@ -54,5 +54,26 @@ def graficar_error_versus(error,valor_x):
     ax.legend(loc='upper right')
     plt.show()
 
-def reporte():
-    pass
+def reporte(peso_inicial,peso_final,error_permisible,error_observado_iteraciones, error_maximo):
+    error = [error_observado_iteraciones[len(error_observado_iteraciones)-1]]
+
+    with open('reporte.csv', 'w', newline='') as csvfile:
+        wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        titulo_p_i={'pesos iniciales'}
+        wr.writerow(titulo_p_i)
+        for word in peso_inicial:
+            wr.writerow([word])
+        
+        titulo_p_f={'pesos finales'}
+        wr.writerow(titulo_p_f)
+        for word in peso_final:
+            wr.writerow([word])
+
+        #iterable expected not float
+        # titulo_error_p ={"Error permisible"}
+        # wr.writerow(titulo_error_p)
+        # wr.writerow(error_permisible)    
+        titulo_error_o = {'Error observado'}
+        wr.writerow(titulo_error_o)
+        for word in error:
+            wr.writerow([word])
