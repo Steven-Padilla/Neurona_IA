@@ -33,7 +33,7 @@ class Neurona():
         graficar_evolucion_pesos(self.lista_pesos,self.lista_iter)
         graficar_versus(self.y_deseada, self.y_calculada)
         graficar_error_versus(self.lista_error_observado,self.y_deseada)
-        reporte(self.lista_w,self.lista_pesos,self.error_permisible,self.lista_error_observado, self.lista_iter)
+        reporte(self.lista_pesos,self.error_permisible,self.lista_error_observado, len(self.lista_iter))
 
 
     def iniciar_alg(self):
@@ -48,12 +48,10 @@ class Neurona():
         lista_w = []
         while len(lista_w) < self.cantidad_x:
             lista_w.append(round(random.uniform(-1, 1), 2))
-        print(f'Lista de pesos: {lista_w}')
         return lista_w
 
     def calcular_u(self):
         lista_u = numpy.matmul(self.lista_x, numpy.transpose(self.lista_w))
-        # print(f'Lista u: {lista_u}')
         return lista_u
 
     def funcion_activacion(self):
@@ -62,10 +60,8 @@ class Neurona():
     def calcular_error(self):
         e = numpy.subtract(self.y_deseada,self.y_calculada)
         self.err_viejo=self.err_nuevo #0
-        print(f'error viejo: {self.err_viejo}')
         self.lista_error_observado.append(e)
         self.err_nuevo=numpy.linalg.norm(e)  #error random
-        print(f'error nuevo: {self.err_nuevo}')
         self.lista_e.append(self.err_nuevo)
         return e
 
@@ -74,7 +70,6 @@ class Neurona():
         n_ex = numpy.dot(self.eta,e_x) 
         nueva_w = self.lista_w+n_ex
         self.lista_pesos.append(nueva_w)
-        # print(f'Lista u: {self.lista_u}')
         return nueva_w
 
     def leer_csv(self):
@@ -89,7 +84,6 @@ class Neurona():
         return (numpy.array(lista_x), numpy.array(arr_aux))
     def calcular_sesgo(self,data):
         sesgo=[1 for _ in range(len(data.axes[0]))]
-        print(len(sesgo))
         return sesgo
 
 if __name__ == '__main__':

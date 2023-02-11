@@ -8,7 +8,8 @@ def graficar_error(error,valor_x):
     ax.set_ylabel('Magnitud del error')
     ax.plot(valor_x, error,label='Error')
     ax.legend(loc='upper right')
-    plt.show()
+    plt.savefig('Evolución_error')
+    # plt.show()
 
 def graficar_evolucion_pesos(pesos,valor_x):
     list1,list2,list3,list4 = [[],[],[],[]]
@@ -19,7 +20,7 @@ def graficar_evolucion_pesos(pesos,valor_x):
         list4.append(peso[3])
 
         
-    print(f'peso: {pesos}')
+    # print(f'peso: {pesos}')
     fig,ax = plt.subplots()
     ax.set_xlabel('Iteración')
     ax.set_ylabel('Evolucion de pesos')
@@ -28,23 +29,20 @@ def graficar_evolucion_pesos(pesos,valor_x):
     ax.plot(valor_x, list3, marker='.', label = 'W X2')
     ax.plot(valor_x, list4, marker='.', label = 'W X3')
     ax.legend(loc="upper right")
-    plt.show()
+    plt.savefig('Evolución_pesos')
+    # plt.show()
 def graficar_versus(y_deseada,y_calculada):
-    valor_x = range(1,len(y_deseada)+1)
-    n=0
-    print(f'y deseada: {y_deseada}')
-    print(f'y calulada: {y_calculada}')
-    
+    valor_x = range(1,len(y_deseada)+1)    
     fig, ax = plt.subplots()
     ax.plot(valor_x, y_deseada,color = "green",marker = "x", label="Y Deseada")
     ax.plot(valor_x, y_calculada,color = "red",marker = "o", label="Y Calculada")
     ax.legend(loc="upper right")
-    plt.show()
+    plt.savefig('Comparacion Ys')
+    # plt.show()
 
 def graficar_error_versus(error,valor_x):
     identificador = range(1,len(valor_x)+1)
     error_inicial,error_final=[error[0],error[len(error)-1]]
-    print(f'error: {error_final}')
     fig, ax = plt.subplots()
     ax.set_xlabel('ID')
     ax.set_ylabel('Error Observado')
@@ -52,28 +50,16 @@ def graficar_error_versus(error,valor_x):
     ax.plot(identificador, error_final,label='Error Final')
 
     ax.legend(loc='upper right')
-    plt.show()
+    plt.savefig('Error_versus')
+    # plt.show()
 
-def reporte(peso_inicial,peso_final,error_permisible,error_observado_iteraciones, error_maximo):
-    error = [error_observado_iteraciones[len(error_observado_iteraciones)-1]]
-
+def reporte(pesos,error_permisible,lista_e_observado, iteraciones):
+    # 'Max eObservado',
+    titulos=['Pesos iniciales', 'Pesos finales','Error permisible','Epocas entrenamiento']
+    print(*lista_e_observado,sep='\n')
     with open('reporte.csv', 'w', newline='') as csvfile:
-        wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
-        titulo_p_i={'pesos iniciales'}
-        wr.writerow(titulo_p_i)
-        for word in peso_inicial:
-            wr.writerow([word])
-        
-        titulo_p_f={'pesos finales'}
-        wr.writerow(titulo_p_f)
-        for word in peso_final:
-            wr.writerow([word])
-
-        #iterable expected not float
-        # titulo_error_p ={"Error permisible"}
-        # wr.writerow(titulo_error_p)
-        # wr.writerow(error_permisible)    
-        titulo_error_o = {'Error observado'}
-        wr.writerow(titulo_error_o)
-        for word in error:
-            wr.writerow([word])
+        wr = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL,fieldnames=titulos)
+        # 'Max eObservado':max(lista_e_observado),
+        dic_print=[{'Pesos iniciales':pesos[0],'Pesos finales':pesos[len(pesos)-1],'Error permisible':error_permisible,'Epocas entrenamiento':iteraciones}]
+        wr.writeheader()
+        wr.writerows(dic_print)
