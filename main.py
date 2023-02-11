@@ -33,7 +33,7 @@ class Neurona():
         graficar_evolucion_pesos(self.lista_pesos,self.lista_iter)
         graficar_versus(self.y_deseada, self.y_calculada)
         graficar_error_versus(self.lista_error_observado,self.y_deseada)
-        reporte(self.lista_pesos,self.error_permisible,self.lista_error_observado, len(self.lista_iter))
+        reporte(self.lista_pesos,self.error_permisible,self.lista_e, len(self.lista_iter))
 
 
     def iniciar_alg(self):

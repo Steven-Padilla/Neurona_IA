@@ -18,19 +18,16 @@ def graficar_evolucion_pesos(pesos,valor_x):
         list2.append(peso[1])
         list3.append(peso[2])
         list4.append(peso[3])
-
-        
-    # print(f'peso: {pesos}')
     fig,ax = plt.subplots()
     ax.set_xlabel('Iteración')
     ax.set_ylabel('Evolucion de pesos')
-    ax.plot(valor_x, list1, marker='.', label = 'W SESGO')
-    ax.plot(valor_x, list2, marker='.', label = 'W X1')
-    ax.plot(valor_x, list3, marker='.', label = 'W X2')
-    ax.plot(valor_x, list4, marker='.', label = 'W X3')
+    ax.plot(valor_x, list1, marker='.', label = 'W0')
+    ax.plot(valor_x, list2, marker='.', label = 'W1')
+    ax.plot(valor_x, list3, marker='.', label = 'W2')
+    ax.plot(valor_x, list4, marker='.', label = 'W3')
     ax.legend(loc="upper right")
     plt.savefig('Evolución_pesos')
-    # plt.show()
+   
 def graficar_versus(y_deseada,y_calculada):
     valor_x = range(1,len(y_deseada)+1)    
     fig, ax = plt.subplots()
@@ -55,11 +52,11 @@ def graficar_error_versus(error,valor_x):
 
 def reporte(pesos,error_permisible,lista_e_observado, iteraciones):
     # 'Max eObservado',
-    titulos=['Pesos iniciales', 'Pesos finales','Error permisible','Epocas entrenamiento']
+    titulos=['Pesos iniciales', 'Pesos finales','Error permisible','Error observado','Epocas entrenamiento']
     print(*lista_e_observado,sep='\n')
     with open('reporte.csv', 'w', newline='') as csvfile:
         wr = csv.DictWriter(csvfile, quoting=csv.QUOTE_ALL,fieldnames=titulos)
         # 'Max eObservado':max(lista_e_observado),
-        dic_print=[{'Pesos iniciales':pesos[0],'Pesos finales':pesos[len(pesos)-1],'Error permisible':error_permisible,'Epocas entrenamiento':iteraciones}]
+        dic_print=[{'Pesos iniciales':pesos[0],'Pesos finales':pesos[len(pesos)-1],'Error permisible':error_permisible,'Error observado':lista_e_observado[len(lista_e_observado)-1],'Epocas entrenamiento':iteraciones}]
         wr.writeheader()
         wr.writerows(dic_print)
